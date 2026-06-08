@@ -808,11 +808,24 @@ function bulkRows(workers){
     <td><span class="badge bb" style="font-size:9px">${w.skill}</span></td>
     <td style="font-size:12px">₹${S.pieceRates[w.skill]||0}</td>
     <td style="font-weight:600">${S.pieceEntries[`${w.id}-${TM}`]||0}</td>
+    <td>
+  <button
+    class="btn btd bts"
+    onclick="deletePieceEntry('${w.id}')">
+    Delete
+  </button>
+</td>
     <td><input type="number" min="0" placeholder="0" id="b-${w.id}" style="width:70px;text-align:center"></td>
   </tr>`).join('');
 }
 function filterBulk(){const s=document.getElementById('bf').value;const t=document.getElementById('bulk-tb');if(t)t.innerHTML=bulkRows(s?S.contractWorkers.filter(w=>w.skill===s):S.contractWorkers)}
 function saveBulk(){let c=0;S.contractWorkers.forEach(w=>{const el=document.getElementById(`b-${w.id}`);if(el&&parseInt(el.value)>0){S.pieceEntries[`${w.id}-${TM}`]=(S.pieceEntries[`${w.id}-${TM}`]||0)+parseInt(el.value);c++}});alert(`Saved for ${c} workers`);nav('piecerate')}
+function deletePieceEntry(workerId){
+  if(confirm('Delete this worker entry?')){
+    delete S.pieceEntries[`${workerId}-${TM}`];
+    nav('piecerate');
+  }
+}
 function addAct(){const n=document.getElementById('na').value.trim();const r=parseFloat(document.getElementById('nr').value)||0;if(!n||!r){alert('Enter name and rate');return}S.pieceRates[n]=r;nav('piecerate')}
 
 function rPayroll(){
